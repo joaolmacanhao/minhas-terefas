@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * Representa um usuário do sistema.
@@ -34,6 +36,7 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.AUTO) // ID gerado automaticamente
 	private Integer id;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "usuario" , fetch = FetchType.LAZY) 
 	// Um usuário pode ter várias tarefas. "mappedBy" indica que o campo "usuario" em Tarefa é o lado dominante
 	private List<Tarefa> tarefas;
