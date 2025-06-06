@@ -1,6 +1,7 @@
 package br.com.jlm.minhastarefas.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jlm.minhastarefas.repository.TarefaRepository;
@@ -33,8 +35,19 @@ public class TarefaControler {
 	 * @return uma lista de todas as tarefas no banco de dados
 	 */
 	@GetMapping("/tarefa") // Mapeia requisições GET para o endpoint /tarefa
-	public List<Tarefa> todasTarefas() {
-		return repositorio.findAll(); // Retorna todas as tarefas armazenadas
+	public List<Tarefa> todasTarefas(@RequestParam Map<String, String> parametros) {
+		// Verifica se não foram passados parâmetros na requisição
+		if (parametros.isEmpty()) {
+			// Se nenhum parâmetro foi informado, retorna todas as tarefas do banco
+			return repositorio.findAll(); // Retorna todas as tarefas armazenadas
+		}
+		
+		// Se houver parâmetros, tenta obter o valor associado à chave "descricao"
+		String descricao = parametros.get("descricao");
+		
+		// Realiza uma busca por tarefas cuja descrição contenha o texto informado
+		// O uso de "%" permite que o termo seja encontrado em qualquer parte da string (like do SQL)
+		return repositorio.findByDescricaoLike("%" + descricao + "%");
 	}
 	
 	/**

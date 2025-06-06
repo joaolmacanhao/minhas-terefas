@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -23,6 +24,7 @@ import javax.persistence.Table;
 
 @Entity // Indica que essa classe será uma entidade JPA, ou seja, representará uma tabela no banco de dados
 @Table(name = "tarefas") // Define o nome da tabela no banco como "tarefas"
+@NamedQuery (name = "Tarefa.tarefasPorCategoria" , query = "select t from Tarefa t inner join t.categoria c  where c.nome = ?1")
 public class Tarefa {
 
 	@Id // Indica o campo de chave primária da tabela

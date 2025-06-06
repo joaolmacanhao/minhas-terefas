@@ -66,6 +66,27 @@ public class CarregarBaseDeDados {
             tarefa.setCategoria(categoria); // Associação com a categoria "Estudos"
             tarefa.setUsuario(usuario); // Associação com o usuário "Admin"
             tarefaRepository.save(tarefa);
+            
+            
+            Usuario usuario2 = new Usuario();
+            usuario2.setNome("Admin2");
+            usuario2.setSenha("1234562");
+            usuarioRepository.save(usuario2);
+
+            // Criando uma nova categoria de tarefa
+            TarefaCategoria categoria2 = new TarefaCategoria();
+            categoria2.setNome("Estudos");
+            tarefaCategoriaRepository.save(categoria2);
+
+            // Criando uma nova tarefa associada ao usuário e à categoria criados
+            Tarefa tarefa2 = new Tarefa();
+            tarefa2.setDescricao("Estudar Spring 2222");
+            tarefa2.setDataEntrega(LocalDate.now().plusDays(1)); // Data de entrega para amanhã
+            tarefa2.setStatus(TarefaStatus.ABERTO); // Status inicial como ABERTO
+            tarefa2.setVisível(true); // Tarefa visível
+            tarefa2.setCategoria(categoria2); // Associação com a categoria "Estudos"
+            tarefa2.setUsuario(usuario2); // Associação com o usuário "Admin"
+            tarefaRepository.save(tarefa2);
         };
     }
 }
