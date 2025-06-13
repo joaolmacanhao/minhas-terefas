@@ -3,6 +3,8 @@ package br.com.jlm.minhastarefas.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +71,7 @@ public class TarefaControler {
 	 * @return a tarefa salva, com ID gerado automaticamente
 	 */
 	@PostMapping("/tarefa") // Mapeia requisições POST para o endpoint /tarefa
-	public Tarefa salvarTarefa(@RequestBody Tarefa tarefa) {
+	public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) { //@Valid para validar o bean usado para nao aceitar campo vazio
 		// O corpo da requisição (JSON) é convertido em um objeto Tarefa automaticamente
 		return repositorio.save(tarefa);
 	}

@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * Representa uma tarefa atribuída a um usuário, com descrição, data de entrega,
@@ -31,10 +34,12 @@ public class Tarefa {
 	@GeneratedValue(strategy = GenerationType.AUTO) // O ID será gerado automaticamente (de acordo com o banco)
 	private Integer id;
 
-	@Column(name = "descricaoTarefa", nullable = false, length = 150) // Define o nome da coluna, torna obrigatória e limita o tamanho
-																		
+	@NotBlank(message = "Campo descrição não pode estar vazio")//Uso do BeanValidation para nao permitir um campo vazio
+	@Size(min = 5, max = 150 , message = "Cmapo Descricao deve ter entre 5 e 150 caracteres")
+	@Column(name = "descricaoTarefa", nullable = false, length = 150) // Define o nome da coluna, torna obrigatória e limita o tamanho																
 	private String descricao;
 
+	@FutureOrPresent(message = "Data não pode ser anterior a data atual")
 	private LocalDate dataEntrega; // Será mapeado como uma coluna do tipo DATE no banco de dados
 
 	@Enumerated(EnumType.STRING) // Armazena o enum como String ao invés de ordinal (número)

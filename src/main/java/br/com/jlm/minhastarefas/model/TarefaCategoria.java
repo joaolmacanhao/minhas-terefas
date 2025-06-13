@@ -1,10 +1,13 @@
 package br.com.jlm.minhastarefas.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -18,6 +21,9 @@ import javax.persistence.Table;
 @Table (name = "tarefasUsuarios") // Define o nome da tabela no banco (poderia ser "categorias")
 public class TarefaCategoria {
 
+	@NotBlank(message = "O campo nome não pode estar vazio")
+	@Size(max = 50 , message = "O Campo deve ter no máximo 50 caracteres")
+	@Column (length = 50)
 	private String nome; // Nome da categoria da tarefa
 	
 	@Id // Chave primária
