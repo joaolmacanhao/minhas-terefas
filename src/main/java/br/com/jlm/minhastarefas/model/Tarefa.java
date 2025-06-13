@@ -34,12 +34,12 @@ public class Tarefa {
 	@GeneratedValue(strategy = GenerationType.AUTO) // O ID será gerado automaticamente (de acordo com o banco)
 	private Integer id;
 
-	@NotBlank(message = "Campo descrição não pode estar vazio")//Uso do BeanValidation para nao permitir um campo vazio
-	@Size(min = 5, max = 150 , message = "Cmapo Descricao deve ter entre 5 e 150 caracteres")
+	@NotBlank(message = "{tarefa.descricao.not-blank}")//Uso do BeanValidation para nao permitir um campo vazio
+	@Size(min = 5, max = 150 , message = "{tarefa.descricao.size}")
 	@Column(name = "descricaoTarefa", nullable = false, length = 150) // Define o nome da coluna, torna obrigatória e limita o tamanho																
 	private String descricao;
 
-	@FutureOrPresent(message = "Data não pode ser anterior a data atual")
+	@FutureOrPresent(message = "{tarefa.descricao.future-or-present}")
 	private LocalDate dataEntrega; // Será mapeado como uma coluna do tipo DATE no banco de dados
 
 	@Enumerated(EnumType.STRING) // Armazena o enum como String ao invés de ordinal (número)
