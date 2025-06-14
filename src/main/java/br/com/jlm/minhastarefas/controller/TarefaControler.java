@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jlm.minhastarefas.repository.TarefaRepository;
+import br.com.jlm.minhastarefas.services.TarefaService;
 import br.com.jlm.minhastarefas.model.Tarefa;
 
 /**
@@ -29,7 +29,7 @@ import br.com.jlm.minhastarefas.model.Tarefa;
 public class TarefaControler {
 	
 	@Autowired // Injeta automaticamente uma instância do repositório no controlador
-	private TarefaRepository repositorio;
+	private TarefaService service;
 
 	/**
 	 * Endpoint para listar todas as tarefas cadastradas.
@@ -41,7 +41,7 @@ public class TarefaControler {
 		// Verifica se não foram passados parâmetros na requisição
 		if (parametros.isEmpty()) {
 			// Se nenhum parâmetro foi informado, retorna todas as tarefas do banco
-			return repositorio.findAll(); // Retorna todas as tarefas armazenadas
+			return service.getTodasTarefas(); // Retorna todas as tarefas armazenadas
 		}
 		
 		// Se houver parâmetros, tenta obter o valor associado à chave "descricao"
@@ -49,7 +49,7 @@ public class TarefaControler {
 		
 		// Realiza uma busca por tarefas cuja descrição contenha o texto informado
 		// O uso de "%" permite que o termo seja encontrado em qualquer parte da string (like do SQL)
-		return repositorio.findByDescricaoLike("%" + descricao + "%");
+		return service.getTarefasPorDescricao(descricao);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class TarefaControler {
 	@GetMapping("/tarefa/{id}") // Mapeia requisições GET com um parâmetro de caminho
 	public Tarefa buscarTarefa(@PathVariable Integer id) {
 		// Busca uma tarefa pelo ID; se não encontrar, retorna null
-		return repositorio.findById(id).orElse(null);
+		return service.getTarefaById(id);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class TarefaControler {
 	@PostMapping("/tarefa") // Mapeia requisições POST para o endpoint /tarefa
 	public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) { //@Valid para validar o bean usado para nao aceitar campo vazio
 		// O corpo da requisição (JSON) é convertido em um objeto Tarefa automaticamente
-		return repositorio.save(tarefa);
+		return service.salvarTarefa(tarefa);
 	}
 	
 	/**
@@ -83,6 +83,6 @@ public class TarefaControler {
 	 */
 	@DeleteMapping("/tarefa/{id}") // Mapeia requisições DELETE para o endpoint /tarefa/{id}
 	public void excluirTarefa(@PathVariable Integer id) {
-		repositorio.deleteById(id); // Exclui a tarefa pelo ID
+		service.deleteById(id); // Exclui a tarefa pelo ID
 	}
 }
