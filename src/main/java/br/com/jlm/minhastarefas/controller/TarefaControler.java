@@ -1,10 +1,14 @@
 package br.com.jlm.minhastarefas.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jlm.minhastarefas.services.TarefaService;
+import br.com.jlm.minhastarefas.controller.responde.TarefaResponse;
 import br.com.jlm.minhastarefas.model.Tarefa;
 
 /**
@@ -30,6 +35,9 @@ public class TarefaControler {
 	
 	@Autowired // Injeta automaticamente uma instância do repositório no controlador
 	private TarefaService service;
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	/**
 	 * Endpoint para listar todas as tarefas cadastradas.
@@ -37,19 +45,28 @@ public class TarefaControler {
 	 * @return uma lista de todas as tarefas no banco de dados
 	 */
 	@GetMapping("/tarefa") // Mapeia requisições GET para o endpoint /tarefa
-	public List<Tarefa> todasTarefas(@RequestParam Map<String, String> parametros) {
+	public List<TarefaResponse> todasTarefas(@RequestParam Map<String, String> parametros) {
+		
 		// Verifica se não foram passados parâmetros na requisição
+		List<Tarefa> tarefas = new ArrayList<>();
+		
 		if (parametros.isEmpty()) {
 			// Se nenhum parâmetro foi informado, retorna todas as tarefas do banco
-			return service.getTodasTarefas(); // Retorna todas as tarefas armazenadas
+			tarefas =  service.getTodasTarefas(); // Retorna todas as tarefas armazenadas
+		}else {
+			
+			// Se houver parâmetros, tenta obter o valor associado à chave "descricao"
+			String descricao = parametros.get("descricao");
+			tarefas = service.getTarefasPorDescricao(descricao);
+			
 		}
 		
-		// Se houver parâmetros, tenta obter o valor associado à chave "descricao"
-		String descricao = parametros.get("descricao");
-		
-		// Realiza uma busca por tarefas cuja descrição contenha o texto informado
-		// O uso de "%" permite que o termo seja encontrado em qualquer parte da string (like do SQL)
-		return service.getTarefasPorDescricao(descricao);
+		List<TarefaResponse> tarefasResponse = tarefas
+				.stream().map(tarefa -> mapper
+				.map(tarefa, TarefaResponse.class))
+				.collect(Collectors.toList());
+
+		return tarefasResponse;
 	}
 	
 	/**
@@ -59,9 +76,13 @@ public class TarefaControler {
 	 * @return a tarefa correspondente ao ID, ou null se não for encontrada
 	 */
 	@GetMapping("/tarefa/{id}") // Mapeia requisições GET com um parâmetro de caminho
-	public Tarefa buscarTarefa(@PathVariable Integer id) {
+	public TarefaResponse buscarTarefa(@PathVariable Integer id) {
 		// Busca uma tarefa pelo ID; se não encontrar, retorna null
-		return service.getTarefaById(id);
+		Tarefa tarefa = service.getTarefaById(id);
+		
+		TarefaResponse tarefaResponse = mapper.map(tarefa, TarefaResponse.class);
+		
+		return tarefaResponse;
 	}
 	
 	/**
@@ -71,9 +92,8 @@ public class TarefaControler {
 	 * @return a tarefa salva, com ID gerado automaticamente
 	 */
 	@PostMapping("/tarefa") // Mapeia requisições POST para o endpoint /tarefa
-	public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) { //@Valid para validar o bean usado para nao aceitar campo vazio
-		// O corpo da requisição (JSON) é convertido em um objeto Tarefa automaticamente
-		return service.salvarTarefa(tarefa);
+	public TarefaResponse salvarTarefa(@Valid @RequestBody Tarefa tarefa) { //@Valid para validar o bean usado para nao aceitar campo vazio
+		return mapper.map(service.salvarTarefa(tarefa), TarefaResponse.class);
 	}
 	
 	/**
