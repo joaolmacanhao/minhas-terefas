@@ -60,7 +60,7 @@ public class CarregarBaseDeDados {
             // Criando uma nova tarefa associada ao usuário e à categoria criados
             Tarefa tarefa = new Tarefa();
             tarefa.setDescricao("Estudar Spring");
-            tarefa.setDataEntrega(LocalDate.now().plusDays(1)); // Data de entrega para amanhã
+            tarefa.setDataEntrega(LocalDate.now().plusDays(4)); // Data de entrega para amanhã
             tarefa.setStatus(TarefaStatus.ABERTO); // Status inicial como ABERTO
             tarefa.setVisível(true); // Tarefa visível
             tarefa.setCategoria(categoria); // Associação com a categoria "Estudos"
@@ -81,7 +81,7 @@ public class CarregarBaseDeDados {
             // Criando uma nova tarefa associada ao usuário e à categoria criados
             Tarefa tarefa2 = new Tarefa();
             tarefa2.setDescricao("Estudar Spring 2222");
-            tarefa2.setDataEntrega(LocalDate.now().plusDays(1)); // Data de entrega para amanhã
+            tarefa2.setDataEntrega(LocalDate.now().plusDays(2)); // Data de entrega para amanhã
             tarefa2.setStatus(TarefaStatus.ABERTO); // Status inicial como ABERTO
             tarefa2.setVisível(true); // Tarefa visível
             tarefa2.setCategoria(categoria2); // Associação com a categoria "Estudos"

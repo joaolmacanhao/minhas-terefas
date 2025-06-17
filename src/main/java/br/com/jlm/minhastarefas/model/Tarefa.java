@@ -44,7 +44,7 @@ public class Tarefa {
 
 	@Enumerated(EnumType.STRING) // Armazena o enum como String ao invés de ordinal (número)
 	@Column(nullable = false, length = 100)
-	private TarefaStatus status;
+	private TarefaStatus status = TarefaStatus.ABERTO;
 
 	private boolean visível; // Campo booleano que pode ser usado para "arquivar" ou esconder tarefas
 
