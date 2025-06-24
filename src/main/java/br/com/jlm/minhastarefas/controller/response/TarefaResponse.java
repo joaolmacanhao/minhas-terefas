@@ -1,4 +1,4 @@
-package br.com.jlm.minhastarefas.controller.responde;
+package br.com.jlm.minhastarefas.controller.response;
 
 import java.time.LocalDate;
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jlm.minhastarefas.services.TarefaService;
 import br.com.jlm.minhastarefas.controller.request.TarefaRequest;
-import br.com.jlm.minhastarefas.controller.responde.TarefaResponse;
+import br.com.jlm.minhastarefas.controller.response.TarefaResponse;
 import br.com.jlm.minhastarefas.model.Tarefa;
 
 /**
