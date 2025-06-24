@@ -3,7 +3,6 @@ package br.com.jlm.minhastarefas.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jlm.minhastarefas.services.TarefaService;
+import br.com.jlm.minhastarefas.controller.request.TarefaRequest;
 import br.com.jlm.minhastarefas.controller.responde.TarefaResponse;
 import br.com.jlm.minhastarefas.model.Tarefa;
 
@@ -92,7 +92,8 @@ public class TarefaControler {
 	 * @return a tarefa salva, com ID gerado automaticamente
 	 */
 	@PostMapping("/tarefa") // Mapeia requisições POST para o endpoint /tarefa
-	public TarefaResponse salvarTarefa(@Valid @RequestBody Tarefa tarefa) { //@Valid para validar o bean usado para nao aceitar campo vazio
+	public TarefaResponse salvarTarefa(@Valid @RequestBody TarefaRequest tarefaReq) { //@Valid para validar o bean usado para nao aceitar campo vazio
+		Tarefa tarefa = mapper.map(tarefaReq, Tarefa.class );
 		return mapper.map(service.salvarTarefa(tarefa), TarefaResponse.class);
 	}
 	
